@@ -7,12 +7,12 @@
   <link rel="icon" type="image/png" href="booha-ghost.png">
   <style>
     :root{
-      --ink:#1f2937;
-      --muted:#6b7280;
-      --paper:#fffaf0;
-      --accent:#7c3aed;
-      --accent-2:#14b8a6;
-      --accent-3:#f59e0b;
+      --ink:#1f2937; /* slate-800 */
+      --muted:#6b7280; /* gray-500 */
+      --paper:#fffaf0; /* ivory */
+      --accent:#7c3aed; /* violet-600 */
+      --accent-2:#14b8a6; /* teal-500 */
+      --accent-3:#f59e0b; /* amber-500 */
       --ok:#22c55e; --bad:#ef4444;
       --bg:#f5f7fb;
     }
@@ -25,103 +25,126 @@
         "side top"
         "side main";
     }
+    /* Top bar */
     .top{
       grid-area:top; display:flex; align-items:center; gap:12px; padding:10px 16px; background:#ffffffbd; backdrop-filter:saturate(1.2) blur(6px); border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:10;
     }
-    .brand{font-weight:800;}
+    .brand{font-weight:800; letter-spacing:.2px}
 
     .progress{margin-left:auto; display:flex; align-items:center; gap:10px}
     .bar{height:8px; width:180px; background:#e5e7eb; border-radius:999px; overflow:hidden}
     .bar>span{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%}
     .streak{font-size:12px; color:var(--muted)}
 
+    /* Sidebar */
     .side{
-      grid-area:side; position:sticky; top:0; height:100vh; background:#121826; color:white; display:flex; flex-direction:column; align-items:center; gap:14px; padding:14px 8px;
-      font-size:13px; text-align:center;
+      grid-area:side; position:sticky; top:0; height:100vh; background:#121826; color:white; display:flex; flex-direction:column; align-items:center; gap:10px; padding:14px 8px;
     }
+    .ghost{line-height:1; margin:8px 0}
     .mode{
-      width:56px; height:56px; border-radius:12px; background:#1f2937; cursor:pointer; border:1px solid #253244; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:2px;
+      width:56px; height:56px; border-radius:16px; display:grid; place-items:center; background:#1f2937; color:#cbd5e1; cursor:pointer; user-select:none; border:1px solid #253244; transition:transform .12s ease, background .2s;
     }
+    .mode:hover{transform:translateY(-2px)}
     .mode.active{background:linear-gradient(180deg,#3b82f6,#8b5cf6); color:white; border-color:transparent}
+    .mode small{font-size:10px; opacity:.9; display:block; margin-top:2px}
 
+    /* Main area */
     .main{grid-area:main; padding:18px;}
-    .canvas{max-width:980px; margin:0 auto; display:grid; gap:18px; grid-template-columns: 1fr; align-items:center; justify-items:center;}
+
+    /* Card Canvas */
+    .canvas{
+      max-width:980px; margin:0 auto; display:grid; gap:18px; grid-template-columns: 1fr; align-items:center; justify-items:center;
+    }
 
     .notecard{
       width:min(780px, 90vw); min-height:260px; background:var(--paper); border:1px solid #e2d6c5; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,.07);
       padding:22px 24px; position:relative; overflow:hidden;
     }
-    .notecard h2{margin:0 0 8px; font-size:26px}
+    .notecard:before{content:""; position:absolute; inset:0; background:repeating-linear-gradient(#0000, #0000 30px, rgba(124,58,237,.06) 31px); pointer-events:none}
+    .notecard h2{margin:0 0 8px; font-size:28px}
     .note-sub{color:var(--muted); font-size:15px}
-    .big{font-size:38px; font-weight:800;}
+    .big{font-size:40px; font-weight:800; letter-spacing:.2px}
 
     .controls{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px}
     .btn{padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:white; cursor:pointer; font-weight:600}
     .btn.primary{background:var(--accent); color:white; border-color:transparent}
+    .btn.ghost{background:#111827; color:white}
 
+    /* Bottom dock */
+    .dock{position:sticky; bottom:0; inset-inline:0; display:flex; gap:10px; justify-content:center; padding:10px; backdrop-filter:blur(8px);}
+
+    /* Toggle */
     .toggle{position:absolute; top:12px; right:12px; background:#111827; color:white; font-size:12px; padding:6px 10px; border-radius:999px; cursor:pointer}
 
+    /* Quiz */
     .quiz{display:grid; gap:16px}
     .choice{padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer}
     .choice.correct{border-color:var(--ok); background:#ecfdf5}
     .choice.wrong{border-color:var(--bad); background:#fef2f2}
 
+    /* Reading */
     .reading{line-height:1.7; font-size:18px}
+    .muted{color:var(--muted)}
 
-    /* Play button circle */
-    .play-btn{
-      width:44px; height:44px; border-radius:50%; border:2px solid var(--accent); background:white; display:flex; justify-content:center; align-items:center;
-      cursor:pointer; font-size:20px; color:var(--accent);
-    }
-    .play-btn:active{transform:scale(.95)}
-
+    /* Responsive */
     @media (max-width:740px){
       body{grid-template-columns:64px 1fr}
       .bar{width:120px}
-      .notecard h2{font-size:22px}
-      .big{font-size:32px}
+      .notecard{padding:18px}
+      .notecard h2{font-size:24px}
+      .big{font-size:34px}
     }
   </style>
 </head>
 <body>
-  <aside class="side">
+  <aside class="side" aria-label="Mode selector">
     <div class="ghost" title="Booha buddy">
       <img src="booha-ghost.png" alt="Booha Ghost" style="width:40px;height:auto;display:block;">
     </div>
-    <div class="mode active" data-mode="vocab"><div>Vocab</div><div>単語</div></div>
-    <div class="mode" data-mode="sentences"><div>Say</div><div>文</div></div>
-    <div class="mode" data-mode="qa"><div>Q&A</div><div>質問</div></div>
-    <div class="mode" data-mode="reading"><div>Read</div><div>読解</div></div>
-    <div class="mode" data-mode="quiz"><div>Quiz</div><div>クイズ</div></div>
+    <div class="mode active" data-mode="vocab" title="Vocabulary">
+      <div>🔤</div><small>Vocab</small>
+    </div>
+    <div class="mode" data-mode="sentences" title="Useful Sentences">
+      <div>💬</div><small>Say</small>
+    </div>
+    <div class="mode" data-mode="qa" title="Interview Q&A">
+      <div>🎙️</div><small>Q&A</small>
+    </div>
+    <div class="mode" data-mode="reading" title="Reading">
+      <div>📖</div><small>Read</small>
+    </div>
+    <div class="mode" data-mode="quiz" title="Quiz">
+      <div>📝</div><small>Quiz</small>
+    </div>
   </aside>
 
   <header class="top">
     <div class="brand">Boo-riculum EIKEN 3 set 1</div>
     <div class="progress">
-      <div class="bar"><span id="progress"></span></div>
+      <div class="bar" aria-label="Progress"><span id="progress"></span></div>
       <div class="streak"><span id="streak">0</span> correct in a row</div>
     </div>
   </header>
 
   <main class="main">
     <section class="canvas" id="canvas"></section>
+    <div class="dock"></div>
   </main>
 
-  <!-- Templates -->
   <template id="tpl-vocab">
     <div class="notecard">
       <button class="toggle" data-key="lang">JP / EN</button>
-      <h2>Vocabulary</h2>
+      <h2 class="muted">Vocabulary</h2>
       <div class="big" data-bind="term"></div>
       <div class="note-sub" data-bind="hint"></div>
       <div style="margin-top:16px">
         <div><strong>Example:</strong> <span data-bind="ex"></span></div>
-        <div class="note-sub" style="margin-top:6px" data-bind="exjp"></div>
+        <div class="muted" style="margin-top:6px" data-bind="exjp"></div>
       </div>
       <div class="controls">
-        <button class="btn" data-key="prev">◀ Back</button>
-        <div class="note-sub"><span data-bind="index"></span>/<span data-bind="total"></span></div>
-        <button class="btn primary" data-key="next">Next ▶</button>
+        <button class="btn" data-key="prev">◀︎ Back</button>
+        <div class="muted"><span data-bind="index"></span> / <span data-bind="total"></span></div>
+        <button class="btn primary" data-key="next">Next ▶︎</button>
       </div>
     </div>
   </template>
@@ -129,16 +152,13 @@
   <template id="tpl-sent">
     <div class="notecard">
       <button class="toggle" data-key="lang">JP / EN</button>
-      <h2>Useful Sentence</h2>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
-        <div class="big" data-bind="sent"></div>
-        <button class="play-btn" data-key="audio">▶</button>
-      </div>
+      <h2 class="muted">Useful Sentence</h2>
+      <div class="big" data-bind="sent"></div>
       <div class="note-sub" data-bind="sentjp"></div>
       <div class="controls">
-        <button class="btn" data-key="prev">◀ Back</button>
-        <div class="note-sub"><span data-bind="index"></span>/<span data-bind="total"></span></div>
-        <button class="btn primary" data-key="next">Next ▶</button>
+        <button class="btn" data-key="prev">◀︎ Back</button>
+        <div class="muted"><span data-bind="index"></span> / <span data-bind="total"></span></div>
+        <button class="btn primary" data-key="next">Next ▶︎</button>
       </div>
     </div>
   </template>
@@ -146,129 +166,322 @@
   <template id="tpl-qa">
     <div class="notecard">
       <button class="toggle" data-key="lang">JP / EN</button>
-      <h2>Interview Practice</h2>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
-        <div class="big" data-bind="q"></div>
-        <button class="play-btn" data-key="audio">▶</button>
-      </div>
-      <div class="note-sub"><strong>Model:</strong> <span data-bind="a"></span></div>
-      <div class="note-sub" style="margin-top:6px" data-bind="ajp"></div>
+      <h2 class="muted">Interview Practice</h2>
+      <div class="big" data-bind="q"></div>
+      <div class="note-sub" style="margin-top:8px"><strong>Model:</strong> <span data-bind="a"></span></div>
+      <div class="muted" style="margin-top:6px" data-bind="ajp"></div>
       <div class="controls">
-        <button class="btn" data-key="prev">◀ Back</button>
-        <div class="note-sub"><span data-bind="index"></span>/<span data-bind="total"></span></div>
-        <button class="btn primary" data-key="next">Next ▶</button>
+        <button class="btn" data-key="prev">◀︎ Back</button>
+        <div class="muted"><span data-bind="index"></span> / <span data-bind="total"></span></div>
+        <button class="btn primary" data-key="next">Next ▶︎</button>
       </div>
     </div>
   </template>
 
   <template id="tpl-read">
-    <div class="notecard"><h2>Reading</h2>
+    <div class="notecard">
+      <h2 class="muted">Reading</h2>
       <div class="reading" data-bind="passage"></div>
       <div class="quiz" style="margin-top:12px" data-bind="qwrap"></div>
       <div class="controls">
-        <button class="btn" data-key="prev">◀ Back</button>
-        <div class="note-sub"><span data-bind="index"></span>/<span data-bind="total"></span></div>
-        <button class="btn primary" data-key="next">Next ▶</button>
+        <button class="btn" data-key="prev">◀︎ Back</button>
+        <div class="muted"><span data-bind="index"></span> / <span data-bind="total"></span></div>
+        <button class="btn primary" data-key="next">Next ▶︎</button>
       </div>
     </div>
   </template>
 
   <template id="tpl-quiz">
-    <div class="notecard"><h2>Quick Quiz</h2>
-      <div style="font-size:22px;font-weight:700" data-bind="q"></div>
+    <div class="notecard">
+      <h2 class="muted">Quick Quiz</h2>
+      <div style="font-size:22px; font-weight:700" data-bind="q"></div>
       <div class="quiz" style="margin-top:12px" data-bind="choices"></div>
       <div class="controls">
-        <button class="btn" data-key="prev">◀ Back</button>
-        <div class="note-sub"><span data-bind="index"></span>/<span data-bind="total"></span></div>
-        <button class="btn primary" data-key="next">Next ▶</button>
+        <button class="btn" data-key="prev">◀︎ Back</button>
+        <div class="muted"><span data-bind="index"></span> / <span data-bind="total"></span></div>
+        <button class="btn primary" data-key="next">Next ▶︎</button>
       </div>
     </div>
   </template>
 
   <script>
-    // --- Data (abbreviated, same as before) ---
+    // --- Data: EIKEN 3 friendly content (EN/JP) ---
     const data = {
       vocab: [
         {en:"always", jp:"いつも", ex:"I always do my homework after dinner.", exjp:"私はいつも夕食の後に宿題をします。"},
-        {en:"sometimes", jp:"ときどき", ex:"She sometimes goes to the library.", exjp:"彼女はときどき図書館へ行きます。"}
-        // ... rest of vocab ...
+        {en:"sometimes", jp:"ときどき", ex:"She sometimes goes to the library.", exjp:"彼女はときどき図書館へ行きます。"},
+        {en:"before", jp:"〜の前に", ex:"Wash your hands before lunch.", exjp:"昼食の前に手を洗いましょう。"},
+        {en:"after", jp:"〜の後で", ex:"After school, I play soccer.", exjp:"放課後、私はサッカーをします。"},
+        {en:"because", jp:"〜なので", ex:"I stayed home because it was rainy.", exjp:"雨だったので家にいました。"},
+        {en:"during", jp:"〜の間", ex:"Be quiet during the test.", exjp:"テストの間は静かにしてください。"},
+        {en:"invitation", jp:"招待", ex:"Thank you for the invitation.", exjp:"ご招待ありがとうございます。"},
+        {en:"visit", jp:"訪れる", ex:"We will visit a museum this Sunday.", exjp:"今週日曜日に博物館を訪れます。"},
+        {en:"hospital", jp:"病院", ex:"My mother works at a hospital.", exjp:"母は病院で働いています。"},
+        {en:"station", jp:"駅", ex:"Let's meet at the station.", exjp:"駅で会いましょう。"},
+        {en:"homework", jp:"宿題", ex:"Do your homework first.", exjp:"まず宿題をしなさい。"},
+        {en:"practice", jp:"練習する", ex:"I practice the piano every day.", exjp:"私は毎日ピアノを練習します。"},
+        {en:"exercise", jp:"運動", ex:"Exercise is good for your health.", exjp:"運動は健康に良いです。"},
+        {en:"healthy", jp:"健康な", ex:"I want to eat healthy food.", exjp:"私は健康的な食べ物を食べたいです。"},
+        {en:"weather", jp:"天気", ex:"The weather is sunny today.", exjp:"今日は天気が晴れです。"},
+        {en:"cloudy", jp:"くもり", ex:"It will be cloudy tomorrow.", exjp:"明日はくもりでしょう。"},
+        {en:"windy", jp:"風が強い", ex:"It's windy outside.", exjp:"外は風が強いです。"},
+        {en:"borrow", jp:"借りる", ex:"Can I borrow your pen?", exjp:"ペンを借りてもいいですか。"},
+        {en:"return", jp:"返す", ex:"Please return the book by Friday.", exjp:"金曜日までに本を返してください。"},
+        {en:"stationery", jp:"文房具", ex:"I bought some stationery.", exjp:"文房具を買いました。"}
       ],
       sentences: [
         {en:"May I open the window?", jp:"窓を開けてもいいですか。"},
-        {en:"Could you tell me the way to the station?", jp:"駅までの道を教えていただけますか。"}
-        // ... rest of sentences ...
+        {en:"Could you tell me the way to the station?", jp:"駅までの道を教えていただけますか。"},
+        {en:"I have a sore throat.", jp:"のどが痛いです。"},
+        {en:"I usually take a bus to school.", jp:"たいていバスで学校へ行きます。"},
+        {en:"I’m looking forward to the school trip.", jp:"修学旅行を楽しみにしています。"},
+        {en:"Please speak more slowly.", jp:"もっとゆっくり話してください。"},
+        {en:"I forgot my homework.", jp:"宿題を忘れました。"},
+        {en:"What time does the library open?", jp:"図書館は何時に開きますか。"},
+        {en:"Can I try this on?", jp:"これを試着できますか。"},
+        {en:"It takes about twenty minutes.", jp:"約20分かかります。"},
+        {en:"I have to help my mother.", jp:"母を手伝わなければなりません。"},
+        {en:"We don’t have school today.", jp:"今日は学校がありません。"},
+        {en:"Do you have any plans this weekend?", jp:"週末の予定はありますか。"},
+        {en:"I’m not sure.", jp:"よく分かりません。"},
+        {en:"Could you pass me the salt?", jp:"塩を取ってくれますか。"},
+        {en:"I need to finish this by tonight.", jp:"今夜までにこれを終わらせる必要があります。"},
+        {en:"What does this word mean?", jp:"この単語はどういう意味ですか。"},
+        {en:"Can you play any instruments?", jp:"何か楽器が弾けますか。"},
+        {en:"I was absent from school yesterday.", jp:"昨日学校を欠席しました。"},
+        {en:"Don’t forget to bring your PE uniform.", jp:"体操服を持ってくるのを忘れないでください。"}
       ],
       qa: [
         {q:"What time do you usually get up?", a:"I usually get up at six thirty.", ajp:"たいてい6時30分に起きます。"},
-        {q:"What do you do after school?", a:"I do my homework and play soccer.", ajp:"宿題をしてサッカーをします。"}
-        // ... rest of qa ...
+        {q:"What do you do after school?", a:"I do my homework and play soccer.", ajp:"宿題をしてサッカーをします。"},
+        {q:"How do you go to school?", a:"I go to school by bicycle.", ajp:"自転車で学校へ行きます。"},
+        {q:"What is your favorite subject?", a:"My favorite subject is English.", ajp:"一番好きな教科は英語です。"},
+        {q:"What did you do last Sunday?", a:"I visited my grandparents.", ajp:"先週の日曜日は祖父母を訪ねました。"},
+        {q:"Where would you like to go in the future?", a:"I’d like to go to Canada.", ajp:"将来カナダに行きたいです。"},
+        {q:"What do you eat for breakfast?", a:"I usually eat toast and eggs.", ajp:"たいていトーストと卵を食べます。"},
+        {q:"Do you belong to any club?", a:"Yes, I’m in the soccer club.", ajp:"はい、サッカー部に入っています。"},
+        {q:"Tell me about your family.", a:"There are four people in my family.", ajp:"家族は4人です。"},
+        {q:"What do you do on weekends?", a:"I hang out with friends or study.", ajp:"友だちと遊ぶか勉強します。"},
+        {q:"Do you have any pets?", a:"Yes, I have a cat.", ajp:"はい、猫を飼っています。"},
+        {q:"What kind of books do you like?", a:"I like mystery books.", ajp:"ミステリーの本が好きです。"},
+        {q:"What season do you like and why?", a:"I like spring because the weather is warm.", ajp:"暖かいので春が好きです。"},
+        {q:"What time do you go to bed?", a:"I go to bed at ten.", ajp:"10時に寝ます。"},
+        {q:"Who do you admire?", a:"I admire my father.", ajp:"父を尊敬しています。"},
+        {q:"Which place would you like to visit in Japan?", a:"I’d like to visit Kyoto.", ajp:"京都に行きたいです。"},
+        {q:"How often do you study English?", a:"I study English every day.", ajp:"毎日英語を勉強します。"},
+        {q:"What do you do to stay healthy?", a:"I exercise and eat vegetables.", ajp:"運動して野菜を食べます。"},
+        {q:"What are you good at?", a:"I’m good at drawing.", ajp:"絵を描くのが得意です。"},
+        {q:"What do you want to be in the future?", a:"I want to be a teacher.", ajp:"将来は先生になりたいです。"}
       ],
-      reading: [/* same as before */],
-      quiz: [/* same as before */]
+      reading: [
+        {
+          passage: `Ken likes plants. Every morning, he waters the flowers in his garden. On Sundays, he visits a small park near his house and takes pictures of trees. He wants to make a book about plants someday.`,
+          questions:[
+            {q:"What does Ken do every morning?", choices:["He reads books.","He waters the flowers.","He visits a park.","He takes the train."], answer:1},
+            {q:"When does Ken visit the park?", choices:["On Sundays","On Fridays","Every night","In winter"], answer:0}
+          ]
+        },
+        {
+          passage: `My school has a clean library. Students can borrow two books for one week. I usually borrow a science book and a story book. The library opens at nine and closes at five.`,
+          questions:[
+            {q:"How many books can students borrow?", choices:["One","Two","Three","Four"], answer:1},
+            {q:"What time does the library close?", choices:["Four","Five","Six","Seven"], answer:1}
+          ]
+        },
+        {
+          passage: `Yumi’s town will have a summer festival next month. Many people will wear yukata and enjoy food from small shops. Yumi wants to help at a drink stand with her friends.`,
+          questions:[
+            {q:"When is the festival?", choices:["This week","Next month","Last year","Tomorrow"], answer:1},
+            {q:"What does Yumi want to do?", choices:["Dance on stage","Help at a drink stand","Play baseball","Watch fireworks at home"], answer:1}
+          ]
+        },
+        {
+          passage: `Mr. Tanaka has a small bakery. He wakes up at four every morning to bake bread. Many students stop by his shop before school to buy sweet bread.`,
+          questions:[
+            {q:"What time does Mr. Tanaka wake up?", choices:["At four","At six","At eight","At ten"], answer:0},
+            {q:"Who often buys bread there?", choices:["Teachers","Students","Tourists","Doctors"], answer:1}
+          ]
+        },
+        {
+          passage: `Our English teacher started a pen-pal project. I write letters to a student in Australia. We talk about school life and favorite sports. I want to visit her someday.`,
+          questions:[
+            {q:"Where is the pen pal from?", choices:["Canada","Australia","Japan","India"], answer:1},
+            {q:"What do they write about?", choices:["Math problems","Weather only","School life and sports","Movies only"], answer:2}
+          ]
+        },
+        {
+          passage: `There is a new bus route in my city. The bus comes every fifteen minutes. It is cheaper than the train, so many people use it to go shopping.`,
+          questions:[
+            {q:"How often does the bus come?", choices:["Every five minutes","Every ten minutes","Every fifteen minutes","Every hour"], answer:2},
+            {q:"Why do many people use the bus?", choices:["It is cheaper than the train","It is faster than airplanes","It is free","It is purple"], answer:0}
+          ]
+        },
+        {
+          passage: `Aya joined the school art club last year. She practices drawing after school on Tuesdays and Thursdays. Next month, the club will hold a small exhibition in the library.`,
+          questions:[
+            {q:"When does Aya practice?", choices:["On Mondays and Fridays","On Tuesdays and Thursdays","On Saturdays","Every day"], answer:1},
+            {q:"Where will the exhibition be?", choices:["In the gym","In the library","In the park","In a museum"], answer:1}
+          ]
+        },
+        {
+          passage: `Taro wants to be a nurse. He likes helping people and studying science. He reads books about hospitals and sometimes watches videos about first aid.`,
+          questions:[
+            {q:"What does Taro want to be?", choices:["A teacher","A nurse","A cook","A singer"], answer:1},
+            {q:"What does he read?", choices:["Comics only","Books about hospitals","Math textbooks","Novels only"], answer:1}
+          ]
+        },
+        {
+          passage: `My grandmother grows tomatoes on her balcony. She gives us fresh tomatoes in summer. We often make salad together and talk about her childhood.`,
+          questions:[
+            {q:"Where does she grow tomatoes?", choices:["In the park","On her balcony","At school","In the forest"], answer:1},
+            {q:"What do we make with tomatoes?", choices:["Soup","Salad","Juice","Pizza only"], answer:1}
+          ]
+        },
+        {
+          passage: `Our class cleaned the beach last Saturday. We picked up plastic bottles and cans for two hours. After that, we ate lunch and played volleyball.`,
+          questions:[
+            {q:"What did the class do?", choices:["They went swimming","They cleaned the beach","They studied math","They watched a movie"], answer:1},
+            {q:"How long did they clean?", choices:["One hour","Two hours","Three hours","All day"], answer:1}
+          ]
+        }
+      ],
+      quiz: [
+        {q:"『いつも』の英語は？", choices:["often","always","usually","sometimes"], answer:1},
+        {q:"borrow の反対は？", choices:["return","bring","keep","buy"], answer:0},
+        {q:"It is very ____ today. I can’t use an umbrella.", choices:["sunny","rainy","windy","cloudy"], answer:2},
+        {q:"Because を使って正しい文は？", choices:["I go school because bus.","I stayed home because I was sick.","Because I sick, stay home.","I because stayed home."], answer:1},
+        {q:"‘文房具’ は英語で？", choices:["library","museum","stationery","bakery"], answer:2},
+        {q:"May I open the window? の返事として自然なのは？", choices:["Yes, you may.","No, you don’t.","Yes, I do.","No, I am."], answer:0},
+        {q:"I’m looking forward to the school trip. の意味は？", choices:["修学旅行が心配です","修学旅行を楽しみにしています","修学旅行に遅れます","修学旅行をやめます"], answer:1},
+        {q:"‘約20分かかります’ の英訳は？", choices:["I take about twenty minutes.","It takes about twenty minutes.","It is twenty about minutes.","Takes twenty minutes about it."], answer:1},
+        {q:"healthy の最も近い意味は？", choices:["楽しい","健康な","忙しい","高い"], answer:1},
+        {q:"We don’t have school today. の日本語は？", choices:["今日は学校があります","今日は学校がありません","今日は学校へ行きます","今日は宿題がありません"], answer:1},
+        {q:"‘〜の間’ の英語は？", choices:["before","after","during","between"], answer:2},
+        {q:"‘くもり’ は？", choices:["cloudy","windy","rainy","snowy"], answer:0},
+        {q:"Please ____ the book by Friday.", choices:["borrow","keep","read","return"], answer:3},
+        {q:"I usually go to school ____ bus.", choices:["by","on","to","in"], answer:0},
+        {q:"‘招待’ は英語で？", choices:["vacation","invitation","information","station"], answer:1},
+        {q:"Can I ____ your pen?", choices:["lend","borrow","buy","open"], answer:1},
+        {q:"I have to ____ my mother.", choices:["help","play","watch","enjoy"], answer:0},
+        {q:"What time does the library ____?", choices:["close","open","start","stop"], answer:1},
+        {q:"He is very ____. He runs every day.", choices:["healthy","hungry","busy","late"], answer:0},
+        {q:"‘風が強い’ は英語で？", choices:["rainy","sunny","windy","storm"], answer:2}
+      ]
     };
 
-    const state = {mode:'vocab',index:0,lang:'EN',streak:0};
-    const $=(s,c=document)=>c.querySelector(s);
-    const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+    // --- State ---
+    const state = {
+      mode: 'vocab',
+      index: 0,
+      lang: 'EN', // EN shows English term big; JP toggles
+      streak: 0,
+      progress: 0
+    };
 
-    const audioEl=new Audio();
-    function playAudio(src){audioEl.src=src;audioEl.currentTime=0;audioEl.play().catch(e=>console.log("Audio error",e));}
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
-    function render(){
-      const wrap=$('#canvas'); wrap.innerHTML='';
-      const list=data[state.mode]; const item=list[state.index];
-      const tplId={vocab:'tpl-vocab',sentences:'tpl-sent',qa:'tpl-qa',reading:'tpl-read',quiz:'tpl-quiz'}[state.mode];
-      const node=document.importNode($("#"+tplId).content,true);
-
-      if(state.mode==='vocab'){
-        const showEN=state.lang==='EN';
-        $("[data-bind=term]",node).textContent=showEN?item.en:item.jp;
-        $("[data-bind=hint]",node).textContent=showEN?item.jp:item.en;
-        $("[data-bind=ex]",node).textContent=item.ex;
-        $("[data-bind=exjp]",node).textContent=item.exjp;
-      }
-      if(state.mode==='sentences'){
-        const showEN=state.lang==='EN';
-        $("[data-bind=sent]",node).textContent=showEN?item.en:item.jp;
-        $("[data-bind=sentjp]",node).textContent=showEN?item.jp:item.en;
-        const n=state.index+1; // 1..20
-        const playBtn = $("[data-key=audio]",node);
-        playBtn.addEventListener('click',()=>playAudio(`audio/${n}.m4a`));
-      }
-      if(state.mode==='qa'){
-        const showEN=state.lang==='EN';
-        $("[data-bind=q]",node).textContent=item.q;
-        $("[data-bind=a]",node).textContent=showEN?item.a:item.ajp;
-        $("[data-bind=ajp]",node).textContent=showEN?item.ajp:item.a;
-        const n=state.index+21; // 21..40
-        const playBtn = $("[data-key=audio]",node);
-        playBtn.addEventListener('click',()=>playAudio(`audio/${n}.m4a`));
-      }
-
-      $("[data-bind=index]",node)?.append(state.index+1);
-      $("[data-bind=total]",node)?.append(list.length);
-
-      let navLock=false;
-      function nav(to){
-        if(navLock)return; navLock=true;
-        if(to==='next'){state.index=(state.index<list.length-1)?state.index+1:0;}
-        if(to==='prev'){state.index=(state.index>0)?state.index-1:list.length-1;}
-        render(); setTimeout(()=>navLock=false,250);
-      }
-      $("[data-key=next]",node)?.addEventListener('click',()=>nav('next'));
-      $("[data-key=prev]",node)?.addEventListener('click',()=>nav('prev'));
-
-      $(".toggle",node)?.addEventListener('click',()=>{state.lang=(state.lang==='EN')?'JP':'EN';render();});
-      wrap.appendChild(node);
-      $('#progress').style.width=((state.index+1)/list.length*100)+"%";
+    // --- Render helpers ---
+    function setProgress(){
+      const total = data[state.mode].length;
+      const p = ((state.index+1)/total)*100;
+      $('#progress').style.width = p + '%';
+    }
+    function setStreak(ok){
+      state.streak = ok ? state.streak+1 : 0;
+      $('#streak').textContent = state.streak;
     }
 
+    function render(){
+      const wrap = $('#canvas');
+      wrap.innerHTML = '';
+      const list = data[state.mode];
+      const item = list[state.index];
+      const tplId = {
+        vocab:'tpl-vocab', sentences:'tpl-sent', qa:'tpl-qa', reading:'tpl-read', quiz:'tpl-quiz'
+      }[state.mode];
+      const node = document.importNode($("#"+tplId).content, true);
+
+      // Bind per mode
+      if(state.mode==='vocab'){
+        const showEN = state.lang==='EN';
+        $("[data-bind=term]", node).textContent = showEN ? item.en : item.jp;
+        $("[data-bind=hint]", node).textContent = showEN ? item.jp : item.en;
+        $("[data-bind=ex]", node).textContent = item.ex;
+        $("[data-bind=exjp]", node).textContent = item.exjp;
+      }
+      if(state.mode==='sentences'){
+        const showEN = state.lang==='EN';
+        $("[data-bind=sent]", node).textContent = showEN ? item.en : item.jp;
+        $("[data-bind=sentjp]", node).textContent = showEN ? item.jp : item.en;
+      }
+      if(state.mode==='qa'){
+        const showEN = state.lang==='EN';
+        $("[data-bind=q]", node).textContent = item.q;
+        $("[data-bind=a]", node).textContent = showEN ? item.a : item.ajp;
+        $("[data-bind=ajp]", node).textContent = showEN ? item.ajp : item.a;
+      }
+      if(state.mode==='reading'){
+        $("[data-bind=passage]", node).textContent = item.passage;
+        const qwrap = $("[data-bind=qwrap]", node);
+        item.questions.forEach((q,qi)=>{
+          const qDiv = document.createElement('div');
+          qDiv.innerHTML = `<div style="font-weight:700">Q${qi+1}. ${q.q}</div>`;
+          q.choices.forEach((c,ci)=>{
+            const btn = document.createElement('div');
+            btn.className = 'choice'; btn.textContent = c;
+            btn.addEventListener('click',()=>{
+              if(ci===q.answer){ btn.classList.add('correct'); setStreak(true);} else {btn.classList.add('wrong'); setStreak(false);} 
+            }, {once:true});
+            qDiv.appendChild(btn);
+          });
+          qwrap.appendChild(qDiv);
+        });
+      }
+      if(state.mode==='quiz'){
+        $("[data-bind=q]", node).textContent = item.q;
+        const cWrap = $("[data-bind=choices]", node);
+        item.choices.forEach((c,ci)=>{
+          const d = document.createElement('div'); d.className='choice'; d.textContent=c;
+          d.addEventListener('click',()=>{
+            if(ci===item.answer){ d.classList.add('correct'); setStreak(true);} else {d.classList.add('wrong'); setStreak(false);} 
+          }, {once:true});
+          cWrap.appendChild(d);
+        });
+      }
+
+      $("[data-bind=index]", node)?.append(state.index+1);
+      $("[data-bind=total]", node)?.append(list.length);
+
+      // Nav buttons
+      $("[data-key=prev]", node)?.addEventListener('click',()=>{ if(state.index>0){ state.index--; render(); } });
+      $("[data-key=next]", node)?.addEventListener('click',()=>{ if(state.index<list.length-1){ state.index++; } else { state.index=0; } render(); });
+
+      // Toggle language (where present)
+      $(".toggle", node)?.addEventListener('click',()=>{ state.lang = (state.lang==='EN')? 'JP':'EN'; render(); });
+
+      wrap.appendChild(node);
+      setProgress();
+    }
+
+    // --- Mode switching ---
     $$(".mode").forEach(m=>{
-      m.onclick=()=>{ $$(".mode").forEach(x=>x.classList.remove('active')); m.classList.add('active');
-        state.mode=m.dataset.mode; state.index=0; state.lang='EN'; render();
-      };
+      m.addEventListener('click',()=>{
+        $$(".mode").forEach(x=>x.classList.remove('active'));
+        m.classList.add('active');
+        state.mode = m.dataset.mode; state.index = 0; state.streak = 0; state.lang='EN';
+        render();
+      })
     });
 
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      if(['ArrowRight','d','D'].includes(e.key)){ $("[data-key=next]")?.click(); }
+      if(['ArrowLeft','a','A'].includes(e.key)){ $("[data-key=prev]")?.click(); }
+      if(['t','T',' '].includes(e.key)){ $(".toggle")?.click(); }
+    });
+
+    // Init
     render();
   </script>
 </body>

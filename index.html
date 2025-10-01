@@ -86,6 +86,12 @@
     .reading{line-height:1.7; font-size:18px}
     .muted{color:var(--muted)}
 
+    /* Vocab audio button (small round) */
+    .audio-btn{
+      width:40px;height:40px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;display:inline-grid;place-items:center;cursor:pointer;
+    }
+    .audio-btn:active{transform:translateY(1px)}
+
     /* Responsive */
     @media (max-width:740px){
       body{grid-template-columns:64px 1fr}
@@ -135,7 +141,14 @@
     <div class="notecard">
       <button class="toggle" data-key="lang">JP / EN</button>
       <h2 class="muted">Vocabulary</h2>
-      <div class="big" data-bind="term"></div>
+
+      <!-- Word + audio row -->
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <div class="big" data-bind="term"></div>
+        <!-- 🔊 audio button lives here -->
+        <button class="audio-btn" data-key="audio" title="Play audio (S)">🔊</button>
+      </div>
+
       <div class="note-sub" data-bind="hint"></div>
       <div style="margin-top:16px">
         <div><strong>Example:</strong> <span data-bind="ex"></span></div>
@@ -381,6 +394,18 @@
     const $ = (sel, ctx=document) => ctx.querySelector(sel);
     const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
+    // Single reusable audio element for vocab 1–20
+    const vocabAudio = new Audio(); // plays audio/1.m4a ... audio/20.m4a
+
+    function playVocabAudio(n){
+      // n is 1..20 (vocab only)
+      vocabAudio.src = `audio/${n}.m4a`;
+      vocabAudio.currentTime = 0;
+      vocabAudio.play().catch(e=>{
+        console.log(`Could not play audio/${n}.m4a`, e);
+      });
+    }
+
     // --- Render helpers ---
     function setProgress(){
       const total = data[state.mode].length;
@@ -409,6 +434,18 @@
         $("[data-bind=hint]", node).textContent = showEN ? item.jp : item.en;
         $("[data-bind=ex]", node).textContent = item.ex;
         $("[data-bind=exjp]", node).textContent = item.exjp;
+
+        // Wire 🔊 button to current vocab index (1..20)
+        const btnAudio = $("[data-key=audio]", node);
+        if(btnAudio){
+          btnAudio.addEventListener('click', ()=>{
+            // Only vocab section uses 1–20.m4a
+            const n = state.index + 1; // 1..20
+            if(n >= 1 && n <= 20){
+              playVocabAudio(n);
+            }
+          });
+        }
       }
       if(state.mode==='sentences'){
         const showEN = state.lang==='EN';
@@ -479,6 +516,11 @@
       if(['ArrowRight','d','D'].includes(e.key)){ $("[data-key=next]")?.click(); }
       if(['ArrowLeft','a','A'].includes(e.key)){ $("[data-key=prev]")?.click(); }
       if(['t','T',' '].includes(e.key)){ $(".toggle")?.click(); }
+      // Play vocab audio with S (only for vocab mode, 1..20)
+      if(['s','S'].includes(e.key) && state.mode==='vocab'){
+        const n = state.index + 1;
+        if(n >= 1 && n <= 20) playVocabAudio(n);
+      }
     });
 
     // Init

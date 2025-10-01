@@ -419,8 +419,8 @@
     player.playbackRate = state.rate;
 
     // Audio mapping:
-    // Vocab 1..20 => 41..60 (m4a)   Sentences 1..20 => 1..20
-    // Q&A   1..20 => 21..40         Reading   1..10 => 61..70
+    // Vocab 1..20 => 41..60   Sentences 1..20 => 1..20
+    // Q&A   1..20 => 21..40   Reading   1..10 => 61..70
     function playVocabAudio(i){     const n = 41 + i; player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }
     function playSentenceAudio(i){  const n = 1 + i;  player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }
     function playQaAudio(i){        const n = 21 + i; player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }

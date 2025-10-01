@@ -158,7 +158,6 @@
     </div>
   </template>
 
-  <!-- Reading + Quiz left unchanged -->
   <template id="tpl-read">
     <div class="notecard"><h2>Reading</h2>
       <div class="reading" data-bind="passage"></div>
@@ -184,9 +183,121 @@
   </template>
 
   <script>
-    // --- Data is same as before (omitted for brevity) ---
-    // ... keep your existing vocab, sentences, qa, reading, quiz arrays here ...
+    // --- Full Data from your working version ---
+    const data = {
+      vocab: [
+        {en:"always", jp:"いつも", ex:"I always do my homework after dinner.", exjp:"私はいつも夕食の後に宿題をします。"},
+        {en:"sometimes", jp:"ときどき", ex:"She sometimes goes to the library.", exjp:"彼女はときどき図書館へ行きます。"},
+        {en:"before", jp:"〜の前に", ex:"Wash your hands before lunch.", exjp:"昼食の前に手を洗いましょう。"},
+        {en:"after", jp:"〜の後で", ex:"After school, I play soccer.", exjp:"放課後、私はサッカーをします。"},
+        {en:"because", jp:"〜なので", ex:"I stayed home because it was rainy.", exjp:"雨だったので家にいました。"},
+        {en:"during", jp:"〜の間", ex:"Be quiet during the test.", exjp:"テストの間は静かにしてください。"},
+        {en:"invitation", jp:"招待", ex:"Thank you for the invitation.", exjp:"ご招待ありがとうございます。"},
+        {en:"visit", jp:"訪れる", ex:"We will visit a museum this Sunday.", exjp:"今週日曜日に博物館を訪れます。"},
+        {en:"hospital", jp:"病院", ex:"My mother works at a hospital.", exjp:"母は病院で働いています。"},
+        {en:"station", jp:"駅", ex:"Let's meet at the station.", exjp:"駅で会いましょう。"},
+        {en:"homework", jp:"宿題", ex:"Do your homework first.", exjp:"まず宿題をしなさい。"},
+        {en:"practice", jp:"練習する", ex:"I practice the piano every day.", exjp:"私は毎日ピアノを練習します。"},
+        {en:"exercise", jp:"運動", ex:"Exercise is good for your health.", exjp:"運動は健康に良いです。"},
+        {en:"healthy", jp:"健康な", ex:"I want to eat healthy food.", exjp:"私は健康的な食べ物を食べたいです。"},
+        {en:"weather", jp:"天気", ex:"The weather is sunny today.", exjp:"今日は天気が晴れです。"},
+        {en:"cloudy", jp:"くもり", ex:"It will be cloudy tomorrow.", exjp:"明日はくもりでしょう。"},
+        {en:"windy", jp:"風が強い", ex:"It's windy outside.", exjp:"外は風が強いです。"},
+        {en:"borrow", jp:"借りる", ex:"Can I borrow your pen?", exjp:"ペンを借りてもいいですか。"},
+        {en:"return", jp:"返す", ex:"Please return the book by Friday.", exjp:"金曜日までに本を返してください。"},
+        {en:"stationery", jp:"文房具", ex:"I bought some stationery.", exjp:"文房具を買いました。"}
+      ],
+      sentences: [
+        {en:"May I open the window?", jp:"窓を開けてもいいですか。"},
+        {en:"Could you tell me the way to the station?", jp:"駅までの道を教えていただけますか。"},
+        {en:"I have a sore throat.", jp:"のどが痛いです。"},
+        {en:"I usually take a bus to school.", jp:"たいていバスで学校へ行きます。"},
+        {en:"I’m looking forward to the school trip.", jp:"修学旅行を楽しみにしています。"},
+        {en:"Please speak more slowly.", jp:"もっとゆっくり話してください。"},
+        {en:"I forgot my homework.", jp:"宿題を忘れました。"},
+        {en:"What time does the library open?", jp:"図書館は何時に開きますか。"},
+        {en:"Can I try this on?", jp:"これを試着できますか。"},
+        {en:"It takes about twenty minutes.", jp:"約20分かかります。"},
+        {en:"I have to help my mother.", jp:"母を手伝わなければなりません。"},
+        {en:"We don’t have school today.", jp:"今日は学校がありません。"},
+        {en:"Do you have any plans this weekend?", jp:"週末の予定はありますか。"},
+        {en:"I’m not sure.", jp:"よく分かりません。"},
+        {en:"Could you pass me the salt?", jp:"塩を取ってくれますか。"},
+        {en:"I need to finish this by tonight.", jp:"今夜までにこれを終わらせる必要があります。"},
+        {en:"What does this word mean?", jp:"この単語はどういう意味ですか。"},
+        {en:"Can you play any instruments?", jp:"何か楽器が弾けますか。"},
+        {en:"I was absent from school yesterday.", jp:"昨日学校を欠席しました。"},
+        {en:"Don’t forget to bring your PE uniform.", jp:"体操服を持ってくるのを忘れないでください。"}
+      ],
+      qa: [
+        {q:"What time do you usually get up?", a:"I usually get up at six thirty.", ajp:"たいてい6時30分に起きます。"},
+        {q:"What do you do after school?", a:"I do my homework and play soccer.", ajp:"宿題をしてサッカーをします。"},
+        {q:"How do you go to school?", a:"I go to school by bicycle.", ajp:"自転車で学校へ行きます。"},
+        {q:"What is your favorite subject?", a:"My favorite subject is English.", ajp:"一番好きな教科は英語です。"},
+        {q:"What did you do last Sunday?", a:"I visited my grandparents.", ajp:"先週の日曜日は祖父母を訪ねました。"},
+        {q:"Where would you like to go in the future?", a:"I’d like to go to Canada.", ajp:"将来カナダに行きたいです。"},
+        {q:"What do you eat for breakfast?", a:"I usually eat toast and eggs.", ajp:"たいていトーストと卵を食べます。"},
+        {q:"Do you belong to any club?", a:"Yes, I’m in the soccer club.", ajp:"はい、サッカー部に入っています。"},
+        {q:"Tell me about your family.", a:"There are four people in my family.", ajp:"家族は4人です。"},
+        {q:"What do you do on weekends?", a:"I hang out with friends or study.", ajp:"友だちと遊ぶか勉強します。"},
+        {q:"Do you have any pets?", a:"Yes, I have a cat.", ajp:"はい、猫を飼っています。"},
+        {q:"What kind of books do you like?", a:"I like mystery books.", ajp:"ミステリーの本が好きです。"},
+        {q:"What season do you like and why?", a:"I like spring because the weather is warm.", ajp:"暖かいので春が好きです。"},
+        {q:"What time do you go to bed?", a:"I go to bed at ten.", ajp:"10時に寝ます。"},
+        {q:"Who do you admire?", a:"I admire my father.", ajp:"父を尊敬しています。"},
+        {q:"Which place would you like to visit in Japan?", a:"I’d like to visit Kyoto.", ajp:"京都に行きたいです。"},
+        {q:"How often do you study English?", a:"I study English every day.", ajp:"毎日英語を勉強します。"},
+        {q:"What do you do to stay healthy?", a:"I exercise and eat vegetables.", ajp:"運動して野菜を食べます。"},
+        {q:"What are you good at?", a:"I’m good at drawing.", ajp:"絵を描くのが得意です。"},
+        {q:"What do you want to be in the future?", a:"I want to be a teacher.", ajp:"将来は先生になりたいです。"}
+      ],
+      reading: [
+        {
+          passage: `Ken likes plants. Every morning, he waters the flowers in his garden. On Sundays, he visits a small park near his house and takes pictures of trees. He wants to make a book about plants someday.`,
+          questions:[
+            {q:"What does Ken do every morning?", choices:["He reads books.","He waters the flowers.","He visits a park.","He takes the train."], answer:1},
+            {q:"When does Ken visit the park?", choices:["On Sundays","On Fridays","Every night","In winter"], answer:0}
+          ]
+        },
+        {
+          passage: `My school has a clean library. Students can borrow two books for one week. I usually borrow a science book and a story book. The library opens at nine and closes at five.`,
+          questions:[
+            {q:"How many books can students borrow?", choices:["One","Two","Three","Four"], answer:1},
+            {q:"What time does the library close?", choices:["Four","Five","Six","Seven"], answer:1}
+          ]
+        },
+        {
+          passage: `Yumi’s town will have a summer festival next month. Many people will wear yukata and enjoy food from small shops. Yumi wants to help at a drink stand with her friends.`,
+          questions:[
+            {q:"When is the festival?", choices:["This week","Next month","Last year","Tomorrow"], answer:1},
+            {q:"What does Yumi want to do?", choices:["Dance on stage","Help at a drink stand","Play baseball","Watch fireworks at home"], answer:1}
+          ]
+        },
+        {
+          passage: `Mr. Tanaka has a small bakery. He wakes up at four every morning to bake bread. Many students stop by his shop before school to buy sweet bread.`,
+          questions:[
+            {q:"What time does Mr. Tanaka wake up?", choices:["At four","At six","At eight","At ten"], answer:0},
+            {q:"Who often buys bread there?", choices:["Teachers","Students","Tourists","Doctors"], answer:1}
+          ]
+        },
+        {
+          passage: `Our English teacher started a pen-pal project. I write letters to a student in Australia. We talk about school life and favorite sports. I want to visit her someday.`,
+          questions:[
+            {q:"Where is the pen pal from?", choices:["Canada","Australia","Japan","India"], answer:1},
+            {q:"What do they write about?", choices:["Math problems","Weather only","School life and sports","Movies only"], answer:2}
+          ]
+        }
+      ],
+      quiz: [
+        {q:"『いつも』の英語は？", choices:["often","always","usually","sometimes"], answer:1},
+        {q:"borrow の反対は？", choices:["return","bring","keep","buy"], answer:0},
+        {q:"It is very ____ today. I can’t use an umbrella.", choices:["sunny","rainy","windy","cloudy"], answer:2},
+        {q:"Because を使って正しい文は？", choices:["I go school because bus.","I stayed home because I was sick.","Because I sick, stay home.","I because stayed home."], answer:1},
+        {q:"‘文房具’ は英語で？", choices:["library","museum","stationery","bakery"], answer:2}
+      ]
+    };
 
+    // --- State ---
     const state = {mode:'vocab',index:0,lang:'EN',streak:0};
     const $=(s,c=document)=>c.querySelector(s);
     const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
@@ -222,8 +333,32 @@
         const n=state.index+21; // 21..40
         $("[data-key=audio]",node).onclick=()=>playAudio(`audio/${n}.m4a`);
       }
-      if(state.mode==='reading'){ /* keep reading logic */ }
-      if(state.mode==='quiz'){ /* keep quiz logic */ }
+      if(state.mode==='reading'){
+        $("[data-bind=passage]",node).textContent=item.passage;
+        const qwrap=$("[data-bind=qwrap]",node);
+        item.questions.forEach((q,qi)=>{
+          const qDiv=document.createElement('div');
+          qDiv.innerHTML=`<div style="font-weight:700">Q${qi+1}. ${q.q}</div>`;
+          q.choices.forEach((c,ci)=>{
+            const btn=document.createElement('div');
+            btn.className='choice'; btn.textContent=c;
+            btn.addEventListener('click',()=>{
+              if(ci===q.answer){btn.classList.add('correct');}else{btn.classList.add('wrong');}
+            },{once:true});
+            qDiv.appendChild(btn);
+          });
+          qwrap.appendChild(qDiv);
+        });
+      }
+      if(state.mode==='quiz'){
+        $("[data-bind=q]",node).textContent=item.q;
+        const cWrap=$("[data-bind=choices]",node);
+        item.choices.forEach((c,ci)=>{
+          const d=document.createElement('div'); d.className='choice'; d.textContent=c;
+          d.addEventListener('click',()=>{if(ci===item.answer){d.classList.add('correct');}else{d.classList.add('wrong');}}, {once:true});
+          cWrap.appendChild(d);
+        });
+      }
 
       $("[data-bind=index]",node)?.append(state.index+1);
       $("[data-bind=total]",node)?.append(list.length);

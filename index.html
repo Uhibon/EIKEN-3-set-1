@@ -19,48 +19,47 @@
       margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
       color:var(--ink);
       background:url('booha-1.jpg') center/cover fixed no-repeat;
-      display:grid; grid-template-columns: 140px 1fr; grid-template-rows: 64px 1fr; grid-template-areas:
+      display:grid; grid-template-columns: 160px 1fr; grid-template-rows: 64px 1fr; grid-template-areas:
         "side top"
         "side main";
     }
-    /* Top bar */
+
+    /* Top bar (brand + meter + global EN/JP) */
     .top{
       grid-area:top; display:flex; align-items:center; gap:12px; padding:10px 16px;
       background:#ffffffcc; backdrop-filter:saturate(1.1) blur(6px);
       border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:10;
     }
     .brand{font-weight:800; letter-spacing:.2px}
-    .top .spacer{flex:1}
-    .select{ border:1px solid #e5e7eb; border-radius:10px; padding:8px 10px; background:white; font-weight:600; }
+    .spacer{flex:1}
     .progress{display:flex; align-items:center; gap:10px}
-    .bar{height:8px; width:180px; background:#e5e7eb; border-radius:999px; overflow:hidden}
+    .bar{height:8px; width:200px; background:#e5e7eb; border-radius:999px; overflow:hidden}
     .bar>span{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%}
-    /* Global EN/JP next to meter */
     .seg{display:inline-flex; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden;}
     .seg button{padding:6px 10px; border:0; background:white; cursor:pointer; font-weight:700}
     .seg button.active{background:#111827; color:#fff}
 
-    /* Sidebar: mode buttons under ghost */
+    /* Sidebar: Booha ghost + bilingual mode buttons */
     .side{
       grid-area:side; position:sticky; top:0; height:100vh; background:#121826; color:white;
-      display:flex; flex-direction:column; align-items:center; gap:12px; padding:14px 10px;
+      display:flex; flex-direction:column; align-items:center; gap:10px; padding:14px 10px;
     }
     .ghost{line-height:1; margin:8px 0}
     .mode-btn{
-      width:100%; padding:10px 12px; text-align:center; border-radius:12px;
+      width:100%; padding:10px 10px; text-align:center; border-radius:12px;
       background:#1f2937; color:#cbd5e1; cursor:pointer; user-select:none;
       border:1px solid #253244; transition:transform .12s ease, background .2s;
-      font-weight:700;
+      font-weight:800; line-height:1.25;
     }
+    .mode-btn small{display:block; font-weight:600; opacity:.9}
     .mode-btn:hover{transform:translateY(-2px)}
     .mode-btn.active{background:#8b5cf6; color:white; border-color:transparent}
 
-    /* Main area */
+    /* Main */
     .main{grid-area:main; padding:18px;}
-
-    /* Card Canvas */
     .canvas{ max-width:980px; margin:0 auto; display:grid; gap:18px; grid-template-columns: 1fr; align-items:center; justify-items:center; }
 
+    /* Notecards */
     .notecard{
       width:min(780px, 90vw); min-height:260px; background:var(--paper); border:1px solid #e2d6c5; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,.07);
       padding:22px 24px; position:relative; overflow:hidden;
@@ -70,12 +69,13 @@
     .note-sub{color:var(--muted); font-size:15px}
     .big{font-size:40px; font-weight:800; letter-spacing:.2px}
 
+    /* Controls */
     .controls{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px}
     .btn{padding:10px 14px; border-radius:12px; border:1px solid #e5e7eb; background:white; cursor:pointer; font-weight:600}
     .btn.primary{background:var(--accent); color:white; border-color:transparent}
     .btn[disabled]{opacity:.6; cursor:not-allowed}
 
-    /* Quiz */
+    /* Quiz / choices */
     .quiz{display:grid; gap:16px}
     .choice{padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer}
     .choice.correct{border-color:var(--ok); background:#ecfdf5}
@@ -85,15 +85,17 @@
     .reading{line-height:1.7; font-size:18px}
     .muted{color:var(--muted)}
 
-    /* Audio */
+    /* Audio + rate controls */
     .audio-wrap{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
     .audio-btn{ width:46px; height:46px; border-radius:999px; border:0; cursor:pointer; display:grid; place-items:center; background:#ef4444; color:#fff; font-weight:900; box-shadow:0 6px 16px rgba(239,68,68,.35); }
     .audio-btn:active{transform:translateY(1px)}
-    .rate-btn{ border:1px solid #e5e7eb; background:white; padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:700 }
+    .rates{display:inline-flex; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden}
+    .rates button{border:0; background:white; padding:6px 10px; cursor:pointer; font-weight:700; font-size:13px}
+    .rates button.active{background:#111827; color:#fff}
 
     /* Responsive */
     @media (max-width:740px){
-      body{grid-template-columns:120px 1fr}
+      body{grid-template-columns:136px 1fr}
       .bar{width:140px}
       .notecard{padding:18px}
       .notecard h2{font-size:24px}
@@ -102,31 +104,22 @@
   </style>
 </head>
 <body>
-  <!-- Sidebar: ghost + mode buttons -->
+  <!-- Sidebar -->
   <aside class="side" aria-label="Modes">
     <div class="ghost" title="Booha buddy">
       <img src="booha-ghost.png" alt="Booha Ghost" style="width:44px;height:auto;display:block;">
     </div>
-    <div class="mode-btn active" data-mode="vocab">Vocab</div>
-    <div class="mode-btn" data-mode="sentences">Sentences</div>
-    <div class="mode-btn" data-mode="qa">Q&amp;A</div>
-    <div class="mode-btn" data-mode="reading">Reading</div>
-    <div class="mode-btn" data-mode="quiz">Quiz</div>
+    <div class="mode-btn active" data-mode="vocab">Vocab<small>語彙</small></div>
+    <div class="mode-btn" data-mode="sentences">Sentences<small>例文</small></div>
+    <div class="mode-btn" data-mode="qa">Q&amp;A<small>面接</small></div>
+    <div class="mode-btn" data-mode="reading">Reading<small>読解</small></div>
+    <div class="mode-btn" data-mode="quiz">Quiz<small>小テスト</small></div>
   </aside>
 
-  <!-- Top: brand, mode dropdown, progress + global EN/JP -->
+  <!-- Top -->
   <header class="top">
     <div class="brand">Boo-riculum EIKEN 3 set 1</div>
     <div class="spacer"></div>
-    <label for="mode" class="muted" style="font-weight:700;margin-right:6px;">Mode</label>
-    <select id="mode" class="select" aria-label="Select mode">
-      <option value="vocab">Vocab</option>
-      <option value="sentences">Sentences</option>
-      <option value="qa">Q&amp;A</option>
-      <option value="reading">Reading</option>
-      <option value="quiz">Quiz</option>
-    </select>
-    <div style="width:10px"></div>
     <div class="progress">
       <div class="bar" aria-label="Progress"><span id="progress"></span></div>
       <div class="seg" id="global-lang">
@@ -146,8 +139,12 @@
       <h2 class="muted" style="margin:0 0 6px 0">Vocabulary</h2>
       <div class="audio-wrap">
         <div class="big" data-bind="term"></div>
-        <button class="audio-btn" title="Play (40–60)">▶</button>
-        <button class="rate-btn" title="Playback rate">1.0×</button>
+        <button class="audio-btn" title="Play (41–60)">▶</button>
+        <div class="rates">
+          <button data-rate="0.5">0.5×</button>
+          <button data-rate="0.6">0.6×</button>
+          <button data-rate="1.0" class="active">1.0×</button>
+        </div>
       </div>
       <div class="note-sub" data-bind="hint"></div>
       <div style="margin-top:16px">
@@ -168,7 +165,11 @@
       <div class="audio-wrap">
         <div class="big" data-bind="sent"></div>
         <button class="audio-btn" title="Play (1–20)">▶</button>
-        <button class="rate-btn" title="Playback rate">1.0×</button>
+        <div class="rates">
+          <button data-rate="0.5">0.5×</button>
+          <button data-rate="0.6">0.6×</button>
+          <button data-rate="1.0" class="active">1.0×</button>
+        </div>
       </div>
       <div class="note-sub" data-bind="sentjp"></div>
       <div class="controls">
@@ -185,7 +186,11 @@
       <div class="audio-wrap">
         <div class="big" data-bind="q"></div>
         <button class="audio-btn" title="Play (21–40)">▶</button>
-        <button class="rate-btn" title="Playback rate">1.0×</button>
+        <div class="rates">
+          <button data-rate="0.5">0.5×</button>
+          <button data-rate="0.6">0.6×</button>
+          <button data-rate="1.0" class="active">1.0×</button>
+        </div>
       </div>
       <div class="note-sub" style="margin-top:8px"><strong>Model:</strong> <span data-bind="a"></span></div>
       <div class="muted" style="margin-top:6px" data-bind="ajp"></div>
@@ -202,7 +207,11 @@
       <h2 class="muted" style="margin:0 0 6px 0">Reading</h2>
       <div class="audio-wrap" style="margin-bottom:6px">
         <button class="audio-btn" title="Play (61–70)">▶</button>
-        <button class="rate-btn" title="Playback rate">1.0×</button>
+        <div class="rates">
+          <button data-rate="0.5">0.5×</button>
+          <button data-rate="0.6">0.6×</button>
+          <button data-rate="1.0" class="active">1.0×</button>
+        </div>
       </div>
       <div class="reading" data-bind="passage"></div>
       <div class="quiz" style="margin-top:12px" data-bind="qwrap"></div>
@@ -228,7 +237,7 @@
   </template>
 
   <script>
-    // --- Data (20 vocab, 20 sentences, 20 Q&A, 10 readings, 20 quiz) ---
+    // --- Data (20/20/20/10/20) ---
     const data = {
       vocab: [
         {en:"always", jp:"いつも", ex:"I always do my homework after dinner.", exjp:"私はいつも夕食の後に宿題をします。"},
@@ -396,9 +405,9 @@
     const state = {
       mode: 'vocab',
       index: 0,
-      lang: 'EN', // 'EN' shows English big
-      rate: 1.0,
-      lastNav: 0, // debounce
+      lang: 'EN',     // global language: EN or JP
+      rate: 1.0,      // current playback rate
+      lastNav: 0,     // debounce
     };
 
     const $ = (sel, ctx=document) => ctx.querySelector(sel);
@@ -409,35 +418,13 @@
     player.preload = 'none';
     player.playbackRate = state.rate;
 
-    // Vocab 1..20 => 40.m4a..60.m4a
-    // NOTE: if your files are exactly 40..60 inclusive (21 files), ensure indexes match needs; here we map 1..20 to 40..59, and 60 is unused.
-    function playVocabAudio(i){
-      const n = 40 + i; // i:0..19 -> 40..59
-      player.src = `${n}.m4a`;
-      player.currentTime = 0;
-      player.play();
-    }
-    // Sentences 1..20 => 1.m4a..20.m4a
-    function playSentenceAudio(i){
-      const n = i + 1;
-      player.src = `${n}.m4a`;
-      player.currentTime = 0;
-      player.play();
-    }
-    // Q&A 1..20 => 21.m4a..40.m4a
-    function playQaAudio(i){
-      const n = 21 + i;
-      player.src = `${n}.m4a`;
-      player.currentTime = 0;
-      player.play();
-    }
-    // Reading 1..10 => 61.m4a..70.m4a
-    function playReadingAudio(i){
-      const n = 61 + i; // i:0..9
-      player.src = `${n}.m4a`;
-      player.currentTime = 0;
-      player.play();
-    }
+    // Audio mapping:
+    // Vocab 1..20 => 41..60 (m4a)   Sentences 1..20 => 1..20
+    // Q&A   1..20 => 21..40         Reading   1..10 => 61..70
+    function playVocabAudio(i){     const n = 41 + i; player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }
+    function playSentenceAudio(i){  const n = 1 + i;  player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }
+    function playQaAudio(i){        const n = 21 + i; player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }
+    function playReadingAudio(i){   const n = 61 + i; player.src = `${n}.m4a`; player.currentTime = 0; player.play(); }
 
     // --- UI helpers ---
     function setProgress(){
@@ -451,13 +438,18 @@
       state.lastNav = now;
       fn();
     }
-
-    function bindRate(btn){
-      btn.textContent = (state.rate.toFixed(1)) + '×';
-      btn.addEventListener('click', ()=>{
-        state.rate = state.rate===1.0 ? 0.8 : 1.0;
-        player.playbackRate = state.rate;
-        btn.textContent = (state.rate.toFixed(1)) + '×';
+    function bindRates(container){
+      const btns = Array.from(container.querySelectorAll('button[data-rate]'));
+      const setActive = (r)=>{
+        btns.forEach(b=>b.classList.toggle('active', b.dataset.rate === r.toString()));
+      };
+      setActive(state.rate.toFixed(1));
+      btns.forEach(b=>{
+        b.addEventListener('click',()=>{
+          state.rate = parseFloat(b.dataset.rate);
+          player.playbackRate = state.rate;
+          setActive(b.dataset.rate);
+        });
       });
     }
 
@@ -466,7 +458,6 @@
       wrap.innerHTML = '';
       const list = data[state.mode];
       const item = list[state.index];
-
       const tplId = { vocab:'tpl-vocab', sentences:'tpl-sent', qa:'tpl-qa', reading:'tpl-read', quiz:'tpl-quiz' }[state.mode];
       const node = document.importNode($("#"+tplId).content, true);
 
@@ -478,14 +469,14 @@
         $("[data-bind=ex]", node).textContent = item.ex;
         $("[data-bind=exjp]", node).textContent = item.exjp;
         node.querySelector('.audio-btn').addEventListener('click', ()=> playVocabAudio(state.index));
-        bindRate(node.querySelector('.rate-btn'));
+        bindRates(node.querySelector('.rates'));
       }
       if(state.mode==='sentences'){
         const showEN = state.lang==='EN';
         $("[data-bind=sent]", node).textContent = showEN ? item.en : item.jp;
         $("[data-bind=sentjp]", node).textContent = showEN ? item.jp : item.en;
         node.querySelector('.audio-btn').addEventListener('click', ()=> playSentenceAudio(state.index));
-        bindRate(node.querySelector('.rate-btn'));
+        bindRates(node.querySelector('.rates'));
       }
       if(state.mode==='qa'){
         const showEN = state.lang==='EN';
@@ -493,12 +484,12 @@
         $("[data-bind=a]", node).textContent = showEN ? item.a : item.ajp;
         $("[data-bind=ajp]", node).textContent = showEN ? item.ajp : item.a;
         node.querySelector('.audio-btn').addEventListener('click', ()=> playQaAudio(state.index));
-        bindRate(node.querySelector('.rate-btn'));
+        bindRates(node.querySelector('.rates'));
       }
       if(state.mode==='reading'){
         node.querySelector('.audio-btn').addEventListener('click', ()=> playReadingAudio(state.index));
-        bindRate(node.querySelector('.rate-btn'));
-        $("[data-bind=passage]", node).textContent = data.reading[state.index].passage;
+        bindRates(node.querySelector('.rates'));
+        $("[data-bind=passage]", node).textContent = item.passage;
         const qwrap = $("[data-bind=qwrap]", node);
         item.questions.forEach((q,qi)=>{
           const qDiv = document.createElement('div');
@@ -526,12 +517,10 @@
         });
       }
 
-      // Counters
+      // Counters & nav
       const total = list.length;
       $("[data-bind=index]", node)?.append(state.index+1);
       $("[data-bind=total]", node)?.append(total);
-
-      // Nav buttons with debounce
       const prevBtn = $("[data-key=prev]", node);
       const nextBtn = $("[data-key=next]", node);
       prevBtn?.addEventListener('click',()=>{ navDebounced(()=>{ state.index = Math.max(0, state.index-1); render(); }); });
@@ -546,24 +535,13 @@
       btn.addEventListener('click', ()=>{
         $$(".mode-btn").forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
-        const m = btn.dataset.mode;
-        state.mode = m;
-        $("#mode").value = m;
+        state.mode = btn.dataset.mode;
         state.index = 0;
         render();
       });
     });
 
-    // Top mode dropdown
-    $("#mode").addEventListener("change", (e)=>{
-      const m = e.target.value;
-      state.mode = m;
-      state.index = 0;
-      $$(".mode-btn").forEach(b=> b.classList.toggle('active', b.dataset.mode===m));
-      render();
-    });
-
-    // Global EN/JP toggle next to meter
+    // Global EN/JP next to progress meter
     (function(){
       const seg = $("#global-lang");
       const btnEN = seg.querySelector('button[data-lang="EN"]');
